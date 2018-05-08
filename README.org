@@ -1,0 +1,12 @@
+#+TITLE: Cryptopals challenges
+
+Solutions for the [[https://cryptopals.com/][Cryptopals challenges]].
+
+Also serves as C++ practice.
+
+** How to run
+
+   Running a specific set is easy. E.g.
+
+   : $ make set11
+   : $ ./prog
