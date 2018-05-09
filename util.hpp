@@ -1,21 +1,14 @@
 #ifndef __UTIL_HPP__
 #define __UTIL_HPP__
 
-/*
-  Encoding and decoding functions.
-
-  Decoding functions take 2 arguments: source (a std::string const) and
-  destination (a pointer to a byte vector). Returns -1 if decoding fails
-  otherwise returns the number of bytes decoded.
-
-  Encoding functions take 1 argument: source (a const pointer to a byte
-  vector). Returns a std::string with the result. Always succeeds.
+/* Utility functions.
 */
 
 #include <cstdint>
 #include <vector>
 #include <iostream>
 
+// Typedefs ftso. clarity.
 typedef uint8_t byte_t;
 typedef std::vector<byte_t> byte_v;
 
@@ -43,6 +36,7 @@ namespace util {
 	return c > 127 ? 255 : hex_table[(int)c];
     }
 
+    // hex alphabet. Used for encoding.
     static const std::string hexa = "0123456789abcdef";
 
 #define PAD 64
@@ -80,6 +74,8 @@ namespace util {
     std::string hex_encode(const byte_v *src);
     std::string base64_encode(const byte_v *srt);
 
-} // end util namespace
+    int hamm_dist(const byte_v *a, const byte_v *b);
+
+}
 
 #endif

@@ -1,10 +1,41 @@
 #include "util.hpp"
 
+#include <iostream>
+
 namespace util {
 
+    /* Compute the hamming distance between two byte vectors a and
+     * b. Returns -1 if |a| != |b|, otherwise returns the number of
+     * bit positions in which a and b differ.
+     */
+    int hamm_dist(const byte_v *a, const byte_v *b) {
+
+	if (a->size() != b->size())
+	    return -1;
+
+	size_t i, j;
+	int dist = 0;
+	byte_t ba, bb;
+
+	for (i = 0; i < a->size(); i++) {
+
+	    ba = (*a)[i];
+	    bb = (*b)[i];
+
+	    for (j = 0; j < 8; j++)
+		dist += ((ba >> j) ^ (bb >> j)) & 0x1;
+	}
+
+	return dist;
+    }
+
+    /* Decode hex string. Stores the result in dest. Note that input
+     * must be a multiple of 2.
+     */
     int hex_decode(const std::string hex, byte_v *dest) {
 
-	// check if input is a multiple of 2
+	// check if input is a multiple of 2. An alternative would be
+	// to prepend a 0 to hex.
 	if (hex.length() % 2)
 	    return -1;
 
@@ -99,7 +130,7 @@ namespace util {
 	    res += b64a[(x & 0x3F)];
 	}
 
-	// adding padding, if necessary
+	// add padding, if necessary
 	if (padding) {
 	    x = (*src)[i++];
 	    res += b64a[(x >> 2)];

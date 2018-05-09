@@ -4,11 +4,8 @@ OBJS = util.o xor_cipher.o
 HDRS = util.hpp xor_cipher.hpp
 
 clean:
-	rm -f *.o
+	rm -f $(OBJS)
 	rm -f "$(PROGNAME)"
-
-%.o: %.cpp
-	$(CXX) -c $<
 
 set11: $(OBJS) $(HDRS)
 	$(CXX) set11.cpp $^ -o $(PROGNAME)
@@ -24,5 +21,8 @@ set14: $(OBJS) $(HDRS)
 
 set15: $(OBJS) $(HDRS)
 	$(CXX) set15.cpp $^ -o $(PROGNAME)
+
+set16: $(OBJS) $(HDRS)
+	$(CXX) set16.cpp $^ -o $(PROGNAME)
 
 .PHONY: clean
