@@ -12,6 +12,13 @@
 typedef uint8_t byte_t;
 typedef std::vector<byte_t> byte_v;
 
+#define DEBUG(v, s)							\
+    do {								\
+	for (size_t i = 0; i < (s); i++)				\
+	    std::cout << (v)[i];					\
+    } while (0)								\
+
+
 namespace util {
 
     static const byte_t hex_table[127] = {

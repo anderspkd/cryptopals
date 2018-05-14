@@ -15,8 +15,8 @@ int main() {
     // int score = 0;
     byte_t most_likely = xor_cipher::most_likely_byte(&raw);
 
-    cout << "mosts likely byte: " << (char)most_likely << endl;
-    cout << "decryption with " << (char)most_likely << ":" << endl;
+    cout << "mosts likely byte: " << (int)most_likely << endl;
+    cout << "decryption with " << (int)most_likely << ":" << endl;
     for (size_t i = 0; i < raw.size(); i++)
 	cout << (char)(most_likely ^ raw[i]);
     cout << endl;
