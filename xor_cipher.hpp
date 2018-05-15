@@ -7,6 +7,11 @@
 namespace xor_cipher {
 
 #define DICT_S 26
+#define ETAOINS_S 7
+
+    static const float etaoins[ETAOINS_S] = {
+	0.12702, 0.09056, 0.08167, 0.07507, 0.06966, 0.06749, 0.06327
+    };
 
     static const float real_freqs[DICT_S] = {
 	0.8167, 0.1492, 0.2782, 0.4253, 0.1270, 0.2228, 0.2015,

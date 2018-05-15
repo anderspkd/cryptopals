@@ -20,10 +20,6 @@ namespace xor_cipher {
 	byte_t b;
 	float dist;
 
-	// DEBUG(*text, 10);
-
-	// std::cout << std::endl << std::endl << std::endl << std::endl;
-
 	size_t text_len = text->size();
 	float counts[DICT_S] = {0};
 
@@ -33,12 +29,10 @@ namespace xor_cipher {
 		counts[b - 65]++;
 	    if (b > 96 && b < 123)
 		counts[b - 97] += 2;
-	    // if (b > 127){
-	    // 	std::cout << "exit early!" << std::endl;
-	    // 	return 15.0;}
+	    // if (b < 30)
+	    // 	for (size_t i = 0; i < DICT_S; i++)
+	    // 	    counts[i] = counts[i] > 0 ? counts[i] - 1 : 0;
 	}
-
-	// DEBUG(*text, 50);
 
 	for (size_t i = 0; i < DICT_S; i++)
 	    dist += std::fabs((counts[i] / text_len) - real_freqs[i]);
@@ -97,11 +91,59 @@ namespace xor_cipher {
      */
     int find_key_size(const byte_v *ctxt) {
 
-	int max_keysize = 15;
-	int keysize = 3; // first guess at keysize is 4
+	// int max_ks = 50;
+	// int ks, best_ks;
+
+	// ks = best_ks = 0;
+
+	// float hd, best_hd;
+
+	// hd = best_hd = max_ks * 8;
+
+	// byte_v c = (*ctxt);
+
+	// while ((ks++) < max_ks) {
+
+	//     // keysize is too large to split ctxt
+	//     if (c.size() < 2 * ks)
+	// 	break;
+
+	//     byte_v v1 (ks);
+	//     byte_v v2 (ks);
+
+	//     for (size_t i = 0; i < ks; i++) {
+	//     	v1[i] = c[i];
+	//     	v2[i] = c[i + ks];
+	//     }
+
+	//     hd = (float)util::hamm_dist(&v1, &v2) / ks;
+
+	//     // for (size_t i = 0; i < ks; i++) v1[i] = c[i];
+	//     // for (size_t i = ks; i < (c.size() - ks) / ks; i += ks) {
+	//     // 	for (size_t j = 0; j < ks; j++) v2[j] = c[j + i];
+	//     // 	hd += (float)util::hamm_dist(&v1, &v2) / ks;
+	//     // }
+
+	//     if (hd < best_hd) {
+	// 	best_hd = hd;
+	// 	best_ks = ks;
+	//     }
+
+	//     std::cout << "keysize = " << ks
+	// 	      << ", score = " << hd << std::endl;
+	// }
+
+	// return best_ks;
+
+	int max_keysize = 30;
+	int keysize = 0; // first guess at keysize is 4
 
 	int curr_hd, best_hd;
 	int smallest_keysize = -1;
+
+	float norm_ks, best_ks;
+
+	norm_ks = best_ks = max_keysize * 8;
 
 	// this is (I think) the max edit dist possible.
 	best_hd = max_keysize * 8;
@@ -117,21 +159,36 @@ namespace xor_cipher {
 
 	    byte_v v1 (keysize);
 	    byte_v v2 (keysize);
+	    byte_v v3 (keysize);
+	    byte_v v4 (keysize);
 
 	    for (size_t i = 0; i < keysize; i++) {
 		v1[i] = _ctxt[i];
 		v2[i] = _ctxt[i + keysize];
+		v3[i] = _ctxt[i + keysize + keysize];
+		v4[i] = _ctxt[i + keysize + keysize + keysize];
 	    }
 
-	    curr_hd = util::hamm_dist(&v1, &v2);
+	    curr_hd = util::hamm_dist(&v1, &v2)
+		+ util::hamm_dist(&v1, &v3)
+		+ util::hamm_dist(&v1, &v4)
+		+ util::hamm_dist(&v2, &v3)
+		+ util::hamm_dist(&v3, &v4);
 
-	    if (curr_hd < best_hd) {
+	    norm_ks = (float)curr_hd / (5*keysize);
+
+	    // if (curr_hd < best_hd) {
+	    // 	smallest_keysize = keysize;
+	    // 	best_hd = curr_hd;
+	    // }
+
+	    if (norm_ks < best_ks) {
 		smallest_keysize = keysize;
-		best_hd = curr_hd;
+		best_ks = norm_ks;
 	    }
 
-	    // std::cout << "keysize=" << keysize
-	    // 	      << ", hamm_dist=" << curr_hd << std::endl;
+	    std::cout << "keysize = " << keysize
+	    	      << ", hamm_dist = " << (float)norm_ks << std::endl;
 	}
 
 	return smallest_keysize;

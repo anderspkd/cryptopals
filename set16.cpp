@@ -22,7 +22,6 @@ int main() {
     while (getline(file, line))
 	_ctxt += line;
 
-
     if(util::base64_decode(_ctxt, &ctxt) < 0) {
     	cout << "could not decode ctxt" << endl;
     	return 1;
@@ -30,25 +29,17 @@ int main() {
 
     byte_v key = xor_cipher::find_repeated_xor_key(&ctxt);
 
-    cout << "key: ";
+    cout << "key: \"";
     for (size_t i = 0; i < key.size(); i++) {
-	cout << (char)key[i] << ", ";
+	cout << (char)key[i];
     }
-    cout << endl;
+    cout << "\"" << endl;
 
     byte_v ptxt;
 
     xor_cipher::repeated_xor(&ctxt, &key, &ptxt);
 
-    // for (size_t i = 0; i < ctxt.size(); i++) {
-    // 	cout << ctxt[i];
-    // }
-
-    // for (size_t i = 0; i < ptxt.size(); i++) {
-    // 	cout << (char)ptxt[i];
-    // }
-
-    // int ks = xor_cipher::find_key_size(&ctxt);
-
-    // cout << "keysize guess: " << ks << endl;
+    for (size_t i = 0; i < ptxt.size(); i++) {
+    	cout << (char)ptxt[i];
+    }
 }
