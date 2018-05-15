@@ -12,8 +12,7 @@ int main() {
     if (util::hex_decode(str, &raw) < 0)
 	cout << "could not decode hex string" << endl;
 
-    // int score = 0;
-    byte_t most_likely = xor_cipher::most_likely_byte(&raw);
+    byte_t most_likely = xor_cipher::most_likely_byte(&raw, NULL);
 
     cout << "mosts likely byte: " << (int)most_likely << endl;
     cout << "decryption with " << (int)most_likely << ":" << endl;

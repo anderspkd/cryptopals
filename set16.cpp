@@ -27,7 +27,8 @@ int main() {
     	return 1;
     }
 
-    byte_v key = xor_cipher::find_repeated_xor_key(&ctxt);
+    int ks = xor_cipher::find_key_size(&ctxt);
+    byte_v key = xor_cipher::find_key(&ctxt, ks);
 
     cout << "key: \"";
     for (size_t i = 0; i < key.size(); i++) {
