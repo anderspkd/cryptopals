@@ -86,52 +86,59 @@ namespace xor_cipher {
      */
     int find_key_size(const byte_v * ctxt) {
 
-	int max_keysize = 30;
-	int keysize = 0; // first guess at keysize is 4
+	int max_keysize      = 40; // maximum keysize to consider
+	int max_chunks       = 30; // maximum number of pairs to check
+	int min_chunks       = 4;  // minumum number of pairs to check
+	int keysize          = 0;  // initial keysize guess (start at 1)
+	int smallest_keysize;      // current best keysize guess
 
-	int curr_hd, best_hd;
-	int smallest_keysize = -1;
+	// hamming weight and normalized hamming weight
+	int hw;
+	float norm_hw;
+	float best_hw;
 
-	float norm_ks, best_ks;
+	// hamming weight will never be above this value.
+	norm_hw = best_hw = max_keysize * 8;
 
-	norm_ks = best_ks = max_keysize * 8;
+	// this is just for ease of reference
+	byte_v c = (*ctxt);
 
-	// this is (I think) the max edit dist possible.
-	best_hd = max_keysize * 8;
-
-	byte_v _ctxt = (*ctxt);
+	// array to hold chunks
+	byte_v key_chunks[max_chunks];
+	int ccount;
 
 	while ((keysize++) < max_keysize) {
 
-	    if (_ctxt.size() < 2 * keysize) {
-		// not enough ciphertext bytes to split ctxt.
-		return -1;
+	    ccount = 0; // reset chunk count
+	    for (size_t i = 0; i < c.size() / keysize; i += keysize) {
+
+		if (ccount == max_chunks)
+		    break;
+
+		byte_v v (keysize);
+
+		for (size_t j = 0; j < keysize; j++) {
+		    v[j] = c[j + i];
+		}
+
+		key_chunks[ccount++] = v;
 	    }
 
-	    byte_v v1 (keysize);
-	    byte_v v2 (keysize);
-	    byte_v v3 (keysize);
-	    byte_v v4 (keysize);
+	    if (ccount < min_chunks)
+		break;
 
-	    for (size_t i = 0; i < keysize; i++) {
-		v1[i] = _ctxt[i];
-		v2[i] = _ctxt[i + keysize];
-		v3[i] = _ctxt[i + keysize + keysize];
-		v4[i] = _ctxt[i + keysize + keysize + keysize];
-	    }
+	    hw = 0;
+	    for (size_t i = 0; i < ccount - 1; i++)
+		for (size_t j = i; j < ccount; j++)
+		    hw += util::hamm_dist(&key_chunks[i], &key_chunks[j]);
+	    norm_hw = (float)hw / (ccount*keysize);
 
-	    curr_hd = util::hamm_dist(&v1, &v2)
-		+ util::hamm_dist(&v1, &v3)
-		+ util::hamm_dist(&v1, &v4)
-		+ util::hamm_dist(&v2, &v3)
-		+ util::hamm_dist(&v3, &v4);
-
-	    norm_ks = (float)curr_hd / (5*keysize);
-
-	    if (norm_ks < best_ks) {
+	    // save best keysize
+	    if (norm_hw < best_hw) {
 		smallest_keysize = keysize;
-		best_ks = norm_ks;
+		best_hw = norm_hw;
 	    }
+
 	}
 
 	return smallest_keysize;
