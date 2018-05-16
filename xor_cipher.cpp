@@ -66,6 +66,8 @@ namespace xor_cipher {
 	if (min_dist)
 	    *min_dist = mdist;
 
+	delete ptxt;
+
 	return bcand;
 
     }
