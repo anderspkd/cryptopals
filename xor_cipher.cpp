@@ -43,7 +43,7 @@ namespace xor_cipher {
 	byte_t cand, bcand;
 	float dist, mdist;
 
-	byte_v * ptxt = new byte_v(ctxt->size());
+	byte_v ptxt (ctxt->size());
 
 	cand = bcand = 0;
 	dist = mdist = (float)ctxt->size();
@@ -51,9 +51,9 @@ namespace xor_cipher {
 	while(cand < 255) {
 
 	    for (size_t i = 0; i < ctxt->size(); i++)
-		(*ptxt)[i] = (*ctxt)[i] ^ cand;
+		ptxt[i] = (*ctxt)[i] ^ cand;
 
-	    dist = score_plaintext(ptxt);
+	    dist = score_plaintext(&ptxt);
 
 	    if (dist < mdist) {
 		mdist = dist;
@@ -65,8 +65,6 @@ namespace xor_cipher {
 
 	if (min_dist)
 	    *min_dist = mdist;
-
-	delete ptxt;
 
 	return bcand;
 
