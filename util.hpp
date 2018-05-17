@@ -12,12 +12,17 @@
 typedef uint8_t byte_t;
 typedef std::vector<byte_t> byte_v;
 
-#define DEBUG(v, s)							\
-    do {								\
-	for (size_t i = 0; i < (s); i++)				\
-	    std::cout << (v)[i];					\
-    } while (0)								\
+#define DEBUG_V(vec, size)			\
+    do {					\
+	for (size_t i = 0; i < (size); i++)	\
+	    std::cout << (vec)[i];		\
+	std::cout << std::endl;			\
+    } while (0)					\
 
+#define DEBUG_A(atom)				\
+    do {					\
+	std::cout << (atom) << std::endl;	\
+    } while (0)					\
 
 namespace util {
 

@@ -19,7 +19,7 @@ namespace xor_cipher {
     float score_plaintext(const byte_v * text) {
 
 	byte_t b;
-	float dist;
+	float dist = 0;
 
 	size_t text_len = text->size();
 	float counts[DICT_S] = {0};
