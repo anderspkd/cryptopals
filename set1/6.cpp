@@ -1,5 +1,5 @@
-#include "xor_cipher.hpp"
-#include "util.hpp"
+#include "../xor_cipher.hpp"
+#include "../util.hpp"
 
 #include <iostream>
 #include <fstream>

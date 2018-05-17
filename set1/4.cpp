@@ -1,5 +1,5 @@
-#include "util.hpp"
-#include "xor_cipher.hpp"
+#include "../util.hpp"
+#include "../xor_cipher.hpp"
 
 #include <iostream>
 #include <fstream>
@@ -50,7 +50,7 @@ int main() {
     cout << "decoded:" << endl;
     vector<byte_t> ctxt;
     int end = util::hex_decode(best_line, &ctxt);
-    for (size_t i = 0; i < end; i++) {
+    for (size_t i = 0; i < (size_t)end; i++) {
 	cout << (char)(ctxt[i] ^ best_byte);
     }
 }
