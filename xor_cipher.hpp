@@ -2,7 +2,7 @@
 #define __XOR_CIPHER_HPP__
 
 #include "util.hpp"
-#include <math.h>
+#include <cmath>
 
 namespace xor_cipher {
 

@@ -1,5 +1,5 @@
 #include "xor_cipher.hpp"
-#include <math.h>
+
 #include <algorithm>
 
 namespace xor_cipher {
