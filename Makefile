@@ -29,7 +29,7 @@ set5: $(OBJS)
 set6: $(OBJS)
 	$(CXX) $(CXX_FLAGS) set1/6.cpp $^ -o $(PROGNAME)
 
-set7: $(OBJS)
-	$(CXX) $(CXX_FLAGS) -lcrypto++ set1/7.cpp $^ -o $(PROGNAME)
+set7: $(OBJS) aes_cipher.o
+	$(CXX) $(CXX_FLAGS) set1/7.cpp $^ -o $(PROGNAME) -lcryptopp
 
 .PHONY: clean
